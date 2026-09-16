@@ -2,17 +2,17 @@ package lab04;
 
 public class Aluno {
 	private String nomeAluno;
-	private double[] notasAluno;
+	private int[] notasAluno;
 	
 	
 	public Aluno(String nomeInicial, int qtdeNotas) {
 		nomeAluno = nomeInicial;
-		notasAluno = new double[qtdeNotas];
+		notasAluno = new int[qtdeNotas];
 	}
 	public String getNomeAluno() {
 		return nomeAluno;
 	}
-	public double[] getNotasAluno() {
+	public int[] getNotasAluno() {
 		return notasAluno;
 	}
 	
@@ -20,7 +20,7 @@ public class Aluno {
 		nomeAluno = novoNome;
 	}
 	
-	public void setNota(int indiceNota, double valorNota) {
+	public void setNota(int indiceNota, int valorNota) {
 		notasAluno[indiceNota] = valorNota;
 	}
 	
