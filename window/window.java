@@ -30,20 +30,20 @@ class DefaultWindowConfigurer implements WindowConfigurer {
         button.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createBevelBorder(
                         BevelBorder.RAISED,
-                        Color.RED, Color.BLACK),
+                        Color.BLUE, Color.BLACK),
                 BorderFactory.createEtchedBorder(EtchedBorder.LOWERED))); 
         
         button.setFont(new Font("Arial", Font.BOLD, 14));
         button.setContentAreaFilled(false); 
         button.setOpaque(true);             
         button.setFocusPainted(false);      
-        button.setForeground(Color.BLACK);
+        button.setForeground(Color.WHITE);
         
         button.setPreferredSize(new Dimension(200, 40)); 
         
-        Color corNormal = Color.RED.darker();
-        Color corHover = Color.RED.darker().darker(); 
-        Color corClick = Color.RED.darker().darker().darker(); 
+        Color corNormal = Color.BLUE.brighter().brighter();
+        Color corHover = Color.BLUE; 
+        Color corClick = Color.blue.darker(); 
         
         
         button.setBackground(corNormal);
@@ -130,7 +130,11 @@ class Something extends JFrame {
                  try {
                     
                      int novaNota = Integer.parseInt(aValue.toString());
-                     
+                     if (novaNota < 0) {
+                    	 novaNota = 0;
+                     }else if (novaNota>100) {
+                    	 novaNota = 100;
+                     }
                     
                      String nomeAluno = getValueAt(row, 0).toString();
                      
@@ -301,7 +305,7 @@ public class window {
                 Something something = new Something(meuDiario);
                 WindowConfigurer windowConfigurer = new DefaultWindowConfigurer();
                 windowConfigurer.configure(something);
-                something.setTitle("Lyceum 2.0");
+                something.setTitle(turma);
                 something.setVisible(true); 
             }
         });
