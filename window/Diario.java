@@ -196,7 +196,7 @@ public String gerarHistograma() {
         }
         
      
-        textoGrafico.append("").append(intervalo[i]).append("\n");
+        textoGrafico.append(" ").append(intervalo[i]).append("\n");
     }
 
   
