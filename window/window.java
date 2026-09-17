@@ -3,7 +3,10 @@ package janela;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+
 import java.awt.*;
 import java.awt.Color;
 
@@ -26,6 +29,12 @@ class DefaultWindowConfigurer implements WindowConfigurer {
     public void setFont(Font font) {
         this.font = font;
     }
+    
+    
+    
+    
+    
+    
     public void estilizedButton(JButton button) {
         button.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createBevelBorder(
@@ -63,6 +72,48 @@ class DefaultWindowConfigurer implements WindowConfigurer {
                 }
             }
         });
+    }
+    
+    
+    public void estilizarCabecalhoTabela(JTable tabela) {
+        JTableHeader cabecalho = tabela.getTableHeader();
+        
+        
+        DefaultTableCellRenderer renderer = new DefaultTableCellRenderer() {
+        	@Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                JComponent comp = (JComponent) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                
+                comp.setBackground(Color.BLUE.brighter().brighter()); 
+                comp.setForeground(Color.WHITE); 
+                comp.setFont(new Font("Arial", Font.BOLD, 14));
+                ((JLabel) comp).setHorizontalAlignment(SwingConstants.CENTER); 
+                
+                
+                comp.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 2, Color.GRAY));
+                
+                return comp;
+            }
+        };
+        
+       
+        renderer.setBackground(Color.BLUE.brighter()); 
+        renderer.setForeground(Color.WHITE); 
+        renderer.setFont(new Font("Arial", Font.BOLD, 14));
+        
+     
+        renderer.setHorizontalAlignment(SwingConstants.CENTER); 
+        renderer.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 1, Color.WHITE));
+        
+    
+        cabecalho.setDefaultRenderer(renderer);
+        
+        
+        cabecalho.setPreferredSize(new Dimension(0, 15));
+        tabela.setRowHeight(15); 
+        tabela.setShowGrid(true); 
+        tabela.setGridColor(Color.GRAY); 
+        tabela.setIntercellSpacing(new Dimension(1, 1));
     }
 }
 
@@ -154,6 +205,7 @@ class Something extends JFrame {
         //modeloTabela = new DefaultTableModel(colunas, 0);
 
         tabelaAlunos = new JTable(modeloTabela);
+        configurer.estilizarCabecalhoTabela(tabelaAlunos);
       
         
       
