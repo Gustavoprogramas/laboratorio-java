@@ -1,21 +1,13 @@
 package janela;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-import javax.swing.JTable;
-
-import java.awt.BorderLayout;
-import java.awt.Font;
-import java.awt.GridLayout;
-
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.EtchedBorder;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.Color;
+
+
 
 interface WindowConfigurer {
     void configure(JFrame window);
@@ -25,6 +17,7 @@ interface WindowConfigurer {
 class DefaultWindowConfigurer implements WindowConfigurer {
 
     private Font font = new Font("Arial", Font.PLAIN, 14);
+	private JButton JButton;
 
     public void configure(JFrame window) {
         window.setFont(font);
@@ -33,10 +26,49 @@ class DefaultWindowConfigurer implements WindowConfigurer {
     public void setFont(Font font) {
         this.font = font;
     }
+    public void estilizedButton(JButton button) {
+        button.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createBevelBorder(
+                        BevelBorder.RAISED,
+                        Color.RED, Color.BLACK),
+                BorderFactory.createEtchedBorder(EtchedBorder.LOWERED))); 
+        
+        button.setFont(new Font("Arial", Font.BOLD, 14));
+        button.setContentAreaFilled(false); 
+        button.setOpaque(true);             
+        button.setFocusPainted(false);      
+        button.setForeground(Color.BLACK);
+        
+        button.setPreferredSize(new Dimension(200, 40)); 
+        
+        Color corNormal = Color.RED.darker();
+        Color corHover = Color.RED.darker().darker(); 
+        Color corClick = Color.RED.darker().darker().darker(); 
+        
+        
+        button.setBackground(corNormal);
+        
+       
+        button.getModel().addChangeListener(new javax.swing.event.ChangeListener() {
+            @Override
+            public void stateChanged(javax.swing.event.ChangeEvent e) {
+                ButtonModel model = (ButtonModel) e.getSource();
+                
+                if (model.isPressed()) {
+                    button.setBackground(corClick); 
+                } else if (model.isRollover()) {
+                    button.setBackground(corHover); 
+                } else {
+                    button.setBackground(corNormal); 
+                }
+            }
+        });
+    }
 }
 
 class Something extends JFrame {
-    private Diario meuDiario;
+ 
+	private Diario meuDiario;
     private DefaultTableModel modeloTabela;
     private JTable tabelaAlunos;
     public Something(Diario diario) {
@@ -48,13 +80,27 @@ class Something extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
         JPanel painelbotoes = new JPanel();
-        painelbotoes.setLayout(new GridLayout(4, 1,10, 10));
-        painelbotoes.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        painelbotoes.setLayout(new GridLayout(10, 1, 2, 2));
+        painelbotoes.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        
+        DefaultWindowConfigurer configurer = new DefaultWindowConfigurer();
        
+        JPanel painelBtnRegistrar = new JPanel();
         JButton btnRegistrarAluno = new JButton("Registrar novo aluno");
+        painelBtnRegistrar.add(btnRegistrarAluno);
+        configurer.estilizedButton(btnRegistrarAluno);
+        JPanel painelBtnEditarNota = new JPanel();
         JButton btnEditarNota = new JButton("Editar nota");
+        painelBtnEditarNota.add(btnEditarNota);
+        configurer.estilizedButton(btnEditarNota);
+        JPanel painelBtnAtt = new JPanel();
         JButton btnAtt = new JButton("Atualizar");
+        painelBtnAtt.add(btnAtt);
+        configurer.estilizedButton(btnAtt);
+        JPanel painelBtnHistograma = new JPanel();
         JButton btnHistograma = new JButton("Gerar Histograma");
+        painelBtnHistograma.add(btnHistograma);
+        configurer.estilizedButton(btnHistograma);
 
         painelbotoes.add(btnRegistrarAluno);
         painelbotoes.add(btnEditarNota);
@@ -71,8 +117,37 @@ class Something extends JFrame {
             colunas[i+1] = "Nota " + (i+1);
          }
          colunas[qtdeNotas+1] = "Média";
-        
-        modeloTabela = new DefaultTableModel(colunas, 0);
+         
+         modeloTabela = new DefaultTableModel(colunas, 0) {
+        	 @Override
+        	 public boolean isCellEditable(int row, int column) {
+        		 if (column > 0 && column <= qtdeNotas) {
+        			 return true;
+        		 }else return false;
+        	 }
+        	 @Override
+             public void setValueAt(Object aValue, int row, int column) {
+                 try {
+                    
+                     int novaNota = Integer.parseInt(aValue.toString());
+                     
+                    
+                     String nomeAluno = getValueAt(row, 0).toString();
+                     
+                    meuDiario.modificarNota(nomeAluno, column, novaNota);
+                     
+                     super.setValueAt(novaNota, row, column);
+                     
+                     SwingUtilities.invokeLater(() -> atualizarTabela());
+
+                 } catch (NumberFormatException ex) {
+                     JOptionPane.showMessageDialog(null, "Por favor, digite apenas números inteiros.");
+                 } catch (Exception ex) {
+                     JOptionPane.showMessageDialog(null, "Erro ao salvar a nota: " + ex.getMessage());
+                 }
+             }
+        };
+        //modeloTabela = new DefaultTableModel(colunas, 0);
 
         tabelaAlunos = new JTable(modeloTabela);
       
@@ -151,7 +226,7 @@ class Something extends JFrame {
         int qtdeNotas = meuDiario.getQuantidadeNotas();
        
         
-        Aluno[] lista = meuDiario.getListaDeAlunos(); // Supondo que você crie esse getter
+        Aluno[] lista = meuDiario.getListaDeAlunos(); 
         for (int i = 0; i < meuDiario.getQuantidadeCadastrados(); i++) {
         Aluno a = lista[i];
            
