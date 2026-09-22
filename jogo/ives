@@ -1,0 +1,54 @@
+void criarFases() {
+
+    // ==================================
+    // FASE 1
+    // ==================================
+
+    Fase fase1 = new Fase(
+            100,
+            490,
+            850,
+            220,
+            1280,
+            720
+    );
+
+    fase1.adicionarPlataforma(0, 614, 1280, 106);
+    fase1.adicionarPlataforma(400, 450, 250, 40);
+    fase1.adicionarPlataforma(750, 300, 250, 40);
+
+    fases.add(fase1);
+
+    // ==================================
+    // FASE 2
+    // ==================================
+
+    Fase fase2 = new Fase(
+            100,
+            490,
+            1050,
+            180,
+            1280,
+            720
+    );
+
+    fase2.adicionarPlataforma(0, 614, 1280, 106);
+    fase2.adicionarPlataforma(340, 530, 220, 40);
+    fase2.adicionarPlataforma(580, 450, 220, 40);
+    fase2.adicionarPlataforma(370, 390, 220, 40);
+    fase2.adicionarPlataforma(590, 290, 220, 40);
+    fase2.adicionarPlataforma(830, 230, 220, 40);
+
+    fase2.adicionarEspinho(370, 520, 100, 30);
+    fase2.adicionarEspinho(430, 520, 100, 30);
+    fase2.adicionarEspinho(610, 440, 100, 30);
+    fase2.adicionarEspinho(470, 380, 100, 30);
+    fase2.adicionarEspinho(390, 380, 100, 30);
+    fase2.adicionarEspinho(620, 280, 100, 30);
+
+    fase2.adicionarCanhao(230, 330, 110, 80, 1);
+    fase2.adicionarCanhao(1070, 170, 110, 80, -1);
+
+    fases.add(fase2);
+
+}
